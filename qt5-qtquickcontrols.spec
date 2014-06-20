@@ -1,25 +1,27 @@
-# TODO:
-# - cleanup
+#
+# Conditional build:
+%bcond_without	qch	# documentation in QCH format
 
 %define		orgname		qtquickcontrols
 %define		qtbase_ver		%{version}
 %define		qtdeclarative_ver	%{version}
-%define		qtscript_ver		%{version}
 %define		qttools_ver		%{version}
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
-Version:	5.2.0
-Release:	0.1
-License:	LGPL v2.1 or GPL v3.0
+Version:	5.3.0
+Release:	1
+License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0 (native code), BSD (Qml scripts)
 Group:		X11/Libraries
-Source0:	http://download.qt-project.org/official_releases/qt/5.2/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
-# Source0-md5:	748ab947f59fb104db2ac1fefa073d81
+Source0:	http://download.qt-project.org/official_releases/qt/5.3/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
+# Source0-md5:	808b5a28f152f1af19dad30a10e5dbf1
 URL:		http://qt-project.org/
-BuildRequires:	qt5-qtbase-devel >= %{qtbase_ver}
-BuildRequires:	qt5-qtdeclarative-devel >= %{qtdeclarative_ver}
-BuildRequires:	qt5-qtscript-devel >= %{qtscript_ver}
-BuildRequires:	qt5-qttools-devel >= %{qttools_ver}
+BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Network-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Qml-devel >= %{qtdeclarative_ver}
+BuildRequires:	Qt5Quick-devel >= %{qtdeclarative_ver}
+BuildRequires:	Qt5Widgets-devel >= %{qtbase_ver}
 %if %{with qch}
 BuildRequires:	qt5-assistant >= %{qttools_ver}
 %endif
@@ -34,10 +36,42 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		qt5dir		%{_libdir}/qt5
 
 %description
-Qt5 Quick Controls modules.
+Qt is a cross-platform application and UI framework. Using Qt, you can
+write web-enabled applications once and deploy them across desktop,
+mobile and embedded systems without rewriting the source code.
+
+This package contains Qt5 Quick Controls, Dialogs, Layouts modules.
 
 %description -l pl.UTF-8
-Moduły Qt5 Quick Controls.
+Qt to wieloplatformowy szkielet aplikacji i interfejsów użytkownika.
+Przy użyciu Qt można pisać aplikacje powiązane z WWW i wdrażać je w
+systemach biurkowych, przenośnych i wbudowanych bez przepisywania kodu
+źródłowego.
+
+Ten pakiet zawiera moduły Qt5 Quick Controls, Dialogs i Layouts.
+
+%package -n Qt5Quick-controls
+Summary:	The Qt5 Quick Controls modules
+Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
+Group:		X11/Libraries
+Requires:	Qt5Core >= %{qtbase_ver}
+Requires:	Qt5Gui >= %{qtbase_ver}
+Requires:	Qt5Qml >= %{qtdeclarative_ver}
+Requires:	Qt5Quick >= %{qtdeclarative_ver}
+Requires:	Qt5Widgets >= %{qtbase_ver}
+
+%description -n Qt5Quick-controls
+Qt5 Quick Controls, Dialogs, Layouts modules.
+
+This package provides a set of widgets/controls that can be used to
+build complete interfaces in Qt5 Quick (v2).
+
+%description -n Qt5Quick-controls -l pl.UTF-8
+Moduły Qt5 Quick Controls, Dialogs i Layouts.
+
+Ten pakiet dostarcza zestaw widgetów/kontrolek, które można
+wykorzystywać do tworzenia kompletnych interfejsów przy użyciu Qt5
+Quick (v2).
 
 %package doc
 Summary:	Qt5 Quick Controls documentation in HTML format
@@ -88,16 +122,39 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -n Qt5Quick-controls
 %defattr(644,root,root,755)
-%{qt5dir}/qml/*
+%doc LGPL_EXCEPTION.txt README header.BSD dist/changes-*
+%dir %{qt5dir}/qml/QtQuick/Controls
+%{qt5dir}/qml/QtQuick/Controls/Private
+%{qt5dir}/qml/QtQuick/Controls/Styles
+%attr(755,root,root) %{qt5dir}/qml/QtQuick/Controls/libqtquickcontrolsplugin.so
+%{qt5dir}/qml/QtQuick/Controls/*.qml
+%{qt5dir}/qml/QtQuick/Controls/plugins.qmltypes
+%{qt5dir}/qml/QtQuick/Controls/qmldir
+%dir %{qt5dir}/qml/QtQuick/Dialogs
+%{qt5dir}/qml/QtQuick/Dialogs/Private
+%attr(755,root,root) %{qt5dir}/qml/QtQuick/Dialogs/libdialogplugin.so
+%{qt5dir}/qml/QtQuick/Dialogs/plugins.qmltypes
+%{qt5dir}/qml/QtQuick/Dialogs/qmldir
+%attr(755,root,root) %{qt5dir}/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
+%{qt5dir}/qml/QtQuick/Layouts/plugins.qmltypes
+%{qt5dir}/qml/QtQuick/Layouts/qmldir
+%dir %{qt5dir}/qml/QtQuick/PrivateWidgets
+%attr(755,root,root) %{qt5dir}/qml/QtQuick/PrivateWidgets/libwidgetsplugin.so
+%{qt5dir}/qml/QtQuick/PrivateWidgets/plugins.qmltypes
+%{qt5dir}/qml/QtQuick/PrivateWidgets/qmldir
 
 %files doc
 %defattr(644,root,root,755)
 %{_docdir}/qt5-doc/qtquickcontrols
+%{_docdir}/qt5-doc/qtquickdialogs
+%{_docdir}/qt5-doc/qtquicklayouts
 
 %if %{with qch}
 %files doc-qch
 %defattr(644,root,root,755)
 %{_docdir}/qt5-doc/qtquickcontrols.qch
+%{_docdir}/qt5-doc/qtquickdialogs.qch
+%{_docdir}/qt5-doc/qtquicklayouts.qch
 %endif
