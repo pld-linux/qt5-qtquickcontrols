@@ -138,6 +138,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Dialogs/libdialogplugin.so
 %{qt5dir}/qml/QtQuick/Dialogs/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/Dialogs/qmldir
+%dir %{qt5dir}/qml/QtQuick/Layouts
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
 %{qt5dir}/qml/QtQuick/Layouts/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/Layouts/qmldir
