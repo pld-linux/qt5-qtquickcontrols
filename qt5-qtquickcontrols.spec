@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_without	qch	# documentation in QCH format
+%bcond_without	qm	# QM translations
 
 %define		orgname		qtquickcontrols
 %define		qtbase_ver		%{version}
@@ -15,6 +16,8 @@ License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0 (native code), 
 Group:		X11/Libraries
 Source0:	http://download.qt-project.org/official_releases/qt/5.4/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
 # Source0-md5:	2950c8df9da1e3d418a1e209d24f503a
+Source1:	http://download.qt-project.org/official_releases/qt/5.4/%{version}/submodules/qttranslations-opensource-src-%{version}.tar.xz
+# Source1-md5:	0bdd1b0a83b03a04a4ebeedfa3057d21
 URL:		http://qt-project.org/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
@@ -26,6 +29,7 @@ BuildRequires:	Qt5Widgets-devel >= %{qtbase_ver}
 BuildRequires:	qt5-assistant >= %{qttools_ver}
 %endif
 BuildRequires:	qt5-build >= %{qtbase_ver}
+%{?with_qm:BuildRequires:	qt5-linguist >= 5.2}
 BuildRequires:	qt5-qmake >= %{qtbase_ver}
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	tar >= 1:1.22
@@ -105,12 +109,19 @@ Qt5 Quick Controls documentation in QCH format.
 Dokumentacja do biblioteki Qt5 Quick Controls w formacie QCH.
 
 %prep
-%setup -q -n %{orgname}-opensource-src-%{version}
+%setup -q -n %{orgname}-opensource-src-%{version} %{?with_qm:-a1}
 
 %build
 qmake-qt5
 %{__make}
 %{__make} %{!?with_qch:html_}docs
+
+%if %{with qm}
+cd qttranslations-opensource-src-%{version}
+qmake-qt5
+%{__make}
+cd ..
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -120,10 +131,31 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install_%{!?with_qch:html_}docs \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 
+%if %{with qm}
+%{__make} -C qttranslations-opensource-src-%{version} install \
+	INSTALL_ROOT=$RPM_BUILD_ROOT
+# keep only qtquickcontrols
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qmlviewer,qt,qtbase,qtconfig,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquick1,qtscript,qtxmlpatterns}_*.qm
+%endif
+
+# find_lang --with-qm supports only PLD qt3/qt4 specific %{_datadir}/locale/*/LC_MESSAGES layout
+find_qt5_qm()
+{
+	name="$1"
+	find $RPM_BUILD_ROOT%{_datadir}/qt5/translations -name "${name}_*.qm" | \
+		sed -e "s:^$RPM_BUILD_ROOT::" \
+		    -e 's:\(.*/'$name'_\)\([a-z][a-z][a-z]\?\)\(_[A-Z][A-Z]\)\?\(\.qm\)$:%lang(\2\3) \1\2\3\4:'
+}
+
+echo '%defattr(644,root,root,755)' > qtquickcontrols.lang
+%if %{with qm}
+find_qt5_qm qtquickcontrols >> qtquickcontrols.lang
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -n Qt5Quick-controls
+%files -n Qt5Quick-controls -f qtquickcontrols.lang
 %defattr(644,root,root,755)
 %doc LGPL_EXCEPTION.txt README header.BSD dist/changes-*
 %dir %{qt5dir}/qml/QtQuick/Controls
