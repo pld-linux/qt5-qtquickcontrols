@@ -157,7 +157,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n Qt5Quick-controls -f qtquickcontrols.lang
 %defattr(644,root,root,755)
-%doc LGPL_EXCEPTION.txt README header.BSD dist/changes-*
+%doc LGPL_EXCEPTION.txt README dist/changes-*
 %dir %{qt5dir}/qml/QtQuick/Controls
 %{qt5dir}/qml/QtQuick/Controls/Private
 %{qt5dir}/qml/QtQuick/Controls/Styles
