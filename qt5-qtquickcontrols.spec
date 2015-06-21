@@ -152,6 +152,9 @@ echo '%defattr(644,root,root,755)' > qtquickcontrols.lang
 find_qt5_qm qtquickcontrols >> qtquickcontrols.lang
 %endif
 
+# no example sources installed, just built binary; clean up it
+%{__rm} $RPM_BUILD_ROOT%{_examplesdir}/qt5/quick/dialogs/systemdialogs/systemdialogs
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
