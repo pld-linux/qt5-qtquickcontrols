@@ -10,15 +10,15 @@
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
-Version:	5.4.2
+Version:	5.5.1
 Release:	1
-License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0 (native code), BSD (Qml scripts)
+License:	LGPL v3 or GPL v2 or commercial
 Group:		X11/Libraries
-Source0:	http://download.qt-project.org/official_releases/qt/5.4/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
-# Source0-md5:	146f499a9f7c0009437077675134632d
-Source1:	http://download.qt-project.org/official_releases/qt/5.4/%{version}/submodules/qttranslations-opensource-src-%{version}.tar.xz
-# Source1-md5:	35151a736e3b720de4f5128386f9c834
-URL:		http://qt-project.org/
+Source0:	http://download.qt.io/official_releases/qt/5.5/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
+# Source0-md5:	01ace647bda006b61200f61ebe6ef93b
+Source1:	http://download.qt.io/official_releases/qt/5.5/%{version}/submodules/qttranslations-opensource-src-%{version}.tar.xz
+# Source1-md5:	1f89d53fe759db123b4b6d9de9d9e8c9
+URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Network-devel >= %{qtbase_ver}
@@ -29,7 +29,7 @@ BuildRequires:	Qt5Widgets-devel >= %{qtbase_ver}
 BuildRequires:	qt5-assistant >= %{qttools_ver}
 %endif
 BuildRequires:	qt5-build >= %{qtbase_ver}
-%{?with_qm:BuildRequires:	qt5-linguist >= 5.2}
+%{?with_qm:BuildRequires:	qt5-linguist >= %{qttools_ver}}
 BuildRequires:	qt5-qmake >= %{qtbase_ver}
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	tar >= 1:1.22
@@ -135,7 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C qttranslations-opensource-src-%{version} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 # keep only qtquickcontrols
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qmlviewer,qt,qtbase,qtconfig,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquick1,qtscript,qtxmlpatterns}_*.qm
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qmlviewer,qt,qtbase,qtconfig,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquick1,qtscript,qtwebsockets,qtxmlpatterns}_*.qm
 %endif
 
 # find_lang --with-qm supports only PLD qt3/qt4 specific %{_datadir}/locale/*/LC_MESSAGES layout
@@ -160,7 +160,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n Qt5Quick-controls -f qtquickcontrols.lang
 %defattr(644,root,root,755)
-%doc LGPL_EXCEPTION.txt README dist/changes-*
+%doc README dist/changes-*
 %dir %{qt5dir}/qml/QtQuick/Controls
 %{qt5dir}/qml/QtQuick/Controls/Private
 %{qt5dir}/qml/QtQuick/Controls/Styles
@@ -173,6 +173,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Dialogs/libdialogplugin.so
 %{qt5dir}/qml/QtQuick/Dialogs/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/Dialogs/qmldir
+%dir %{qt5dir}/qml/QtQuick/Extras
+%{qt5dir}/qml/QtQuick/Extras/designer
+%attr(755,root,root) %{qt5dir}/qml/QtQuick/Extras/libqtquickextrasplugin.so
+%{qt5dir}/qml/QtQuick/Extras/plugins.qmltypes
+%{qt5dir}/qml/QtQuick/Extras/qmldir
 %dir %{qt5dir}/qml/QtQuick/Layouts
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
 %{qt5dir}/qml/QtQuick/Layouts/plugins.qmltypes
@@ -186,6 +191,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_docdir}/qt5-doc/qtquickcontrols
 %{_docdir}/qt5-doc/qtquickdialogs
+%{_docdir}/qt5-doc/qtquickextras
 %{_docdir}/qt5-doc/qtquicklayouts
 
 %if %{with qch}
@@ -193,5 +199,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_docdir}/qt5-doc/qtquickcontrols.qch
 %{_docdir}/qt5-doc/qtquickdialogs.qch
+%{_docdir}/qt5-doc/qtquickextras.qch
 %{_docdir}/qt5-doc/qtquicklayouts.qch
 %endif
