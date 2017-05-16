@@ -10,14 +10,14 @@
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
-Version:	5.5.1
+Version:	5.8.0
 Release:	1
 License:	LGPL v3 or GPL v2 or commercial
 Group:		X11/Libraries
-Source0:	http://download.qt.io/official_releases/qt/5.5/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
-# Source0-md5:	01ace647bda006b61200f61ebe6ef93b
-Source1:	http://download.qt.io/official_releases/qt/5.5/%{version}/submodules/qttranslations-opensource-src-%{version}.tar.xz
-# Source1-md5:	1f89d53fe759db123b4b6d9de9d9e8c9
+Source0:	http://download.qt.io/official_releases/qt/5.8/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
+# Source0-md5:	62124ab5b9a9aee99138d848ea0e35a3
+Source1:	http://download.qt.io/official_releases/qt/5.8/%{version}/submodules/qttranslations-opensource-src-%{version}.tar.xz
+# Source1-md5:	b6c6748a923b9639c7d018cfdb04caf4
 URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
@@ -44,7 +44,7 @@ Qt is a cross-platform application and UI framework. Using Qt, you can
 write web-enabled applications once and deploy them across desktop,
 mobile and embedded systems without rewriting the source code.
 
-This package contains Qt5 Quick Controls, Dialogs, Layouts modules.
+This package contains Qt5 Quick Controls, Dialogs modules.
 
 %description -l pl.UTF-8
 Qt to wieloplatformowy szkielet aplikacji i interfejsów użytkownika.
@@ -52,7 +52,7 @@ Przy użyciu Qt można pisać aplikacje powiązane z WWW i wdrażać je w
 systemach biurkowych, przenośnych i wbudowanych bez przepisywania kodu
 źródłowego.
 
-Ten pakiet zawiera moduły Qt5 Quick Controls, Dialogs i Layouts.
+Ten pakiet zawiera moduły Qt5 Quick Controls, Dialogs.
 
 %package -n Qt5Quick-controls
 Summary:	The Qt5 Quick Controls modules
@@ -66,13 +66,13 @@ Requires:	Qt5Widgets >= %{qtbase_ver}
 Obsoletes:	qt5-qtquickcontrols
 
 %description -n Qt5Quick-controls
-Qt5 Quick Controls, Dialogs, Layouts modules.
+Qt5 Quick Controls, Dialogs modules.
 
 This package provides a set of widgets/controls that can be used to
 build complete interfaces in Qt5 Quick (v2).
 
 %description -n Qt5Quick-controls -l pl.UTF-8
-Moduły Qt5 Quick Controls, Dialogs i Layouts.
+Moduły Qt5 Quick Controls, Dialogs.
 
 Ten pakiet dostarcza zestaw widgetów/kontrolek, które można
 wykorzystywać do tworzenia kompletnych interfejsów przy użyciu Qt5
@@ -152,9 +152,6 @@ echo '%defattr(644,root,root,755)' > qtquickcontrols.lang
 find_qt5_qm qtquickcontrols >> qtquickcontrols.lang
 %endif
 
-# no example sources installed, just built binary; clean up it
-%{__rm} $RPM_BUILD_ROOT%{_examplesdir}/qt5/quick/dialogs/systemdialogs/systemdialogs
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -178,10 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Extras/libqtquickextrasplugin.so
 %{qt5dir}/qml/QtQuick/Extras/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/Extras/qmldir
-%dir %{qt5dir}/qml/QtQuick/Layouts
-%attr(755,root,root) %{qt5dir}/qml/QtQuick/Layouts/libqquicklayoutsplugin.so
-%{qt5dir}/qml/QtQuick/Layouts/plugins.qmltypes
-%{qt5dir}/qml/QtQuick/Layouts/qmldir
+%{qt5dir}/qml/QtQuick/Extras/Private
 %dir %{qt5dir}/qml/QtQuick/PrivateWidgets
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/PrivateWidgets/libwidgetsplugin.so
 %{qt5dir}/qml/QtQuick/PrivateWidgets/plugins.qmltypes
@@ -192,7 +186,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/qt5-doc/qtquickcontrols
 %{_docdir}/qt5-doc/qtquickdialogs
 %{_docdir}/qt5-doc/qtquickextras
-%{_docdir}/qt5-doc/qtquicklayouts
 
 %if %{with qch}
 %files doc-qch
@@ -200,5 +193,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/qt5-doc/qtquickcontrols.qch
 %{_docdir}/qt5-doc/qtquickdialogs.qch
 %{_docdir}/qt5-doc/qtquickextras.qch
-%{_docdir}/qt5-doc/qtquicklayouts.qch
 %endif
