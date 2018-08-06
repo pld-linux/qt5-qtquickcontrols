@@ -10,14 +10,14 @@
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
-Version:	5.8.0
+Version:	5.11.1
 Release:	1
 License:	LGPL v3 or GPL v2 or commercial
 Group:		X11/Libraries
-Source0:	http://download.qt.io/official_releases/qt/5.8/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
-# Source0-md5:	62124ab5b9a9aee99138d848ea0e35a3
-Source1:	http://download.qt.io/official_releases/qt/5.8/%{version}/submodules/qttranslations-opensource-src-%{version}.tar.xz
-# Source1-md5:	b6c6748a923b9639c7d018cfdb04caf4
+Source0:	http://download.qt.io/official_releases/qt/5.11/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
+# Source0-md5:	e9743376000e5db6665114c07148e993
+Source1:	http://download.qt.io/official_releases/qt/5.11/%{version}/submodules/qttranslations-everywhere-src-%{version}.tar.xz
+# Source1-md5:	67c0dbd61c2b92552b5339d82a94b1a8
 URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
@@ -109,7 +109,7 @@ Qt5 Quick Controls documentation in QCH format.
 Dokumentacja do biblioteki Qt5 Quick Controls w formacie QCH.
 
 %prep
-%setup -q -n %{orgname}-opensource-src-%{version} %{?with_qm:-a1}
+%setup -q -n %{orgname}-everywhere-src-%{version} %{?with_qm:-a1}
 
 %build
 qmake-qt5
@@ -117,7 +117,7 @@ qmake-qt5
 %{?with_doc:%{__make} docs}
 
 %if %{with qm}
-cd qttranslations-opensource-src-%{version}
+cd qttranslations-everywhere-src-%{version}
 qmake-qt5
 %{__make}
 cd ..
@@ -134,10 +134,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %if %{with qm}
-%{__make} -C qttranslations-opensource-src-%{version} install \
+%{__make} -C qttranslations-everywhere-src-%{version} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 # keep only qtquickcontrols
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qmlviewer,qt,qtbase,qtconfig,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquick1,qtscript,qtwebsockets,qtxmlpatterns}_*.qm
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qmlviewer,qt,qtbase,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquick1,qtquickcontrols2,qtserialport,qtscript,qtwebengine,qtwebsockets,qtxmlpatterns}_*.qm
 %endif
 
 # find_lang --with-qm supports only PLD qt3/qt4 specific %{_datadir}/locale/*/LC_MESSAGES layout
@@ -165,16 +165,23 @@ rm -rf $RPM_BUILD_ROOT
 %{qt5dir}/qml/QtQuick/Controls/Styles
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Controls/libqtquickcontrolsplugin.so
 %{qt5dir}/qml/QtQuick/Controls/*.qml
+%{qt5dir}/qml/QtQuick/Controls/*.qmlc
 %{qt5dir}/qml/QtQuick/Controls/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/Controls/qmldir
 %dir %{qt5dir}/qml/QtQuick/Dialogs
 %{qt5dir}/qml/QtQuick/Dialogs/Private
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Dialogs/libdialogplugin.so
+%{qt5dir}/qml/QtQuick/Dialogs/*.qml
+%{qt5dir}/qml/QtQuick/Dialogs/*.qmlc
+%{qt5dir}/qml/QtQuick/Dialogs/images
 %{qt5dir}/qml/QtQuick/Dialogs/plugins.qmltypes
+%{qt5dir}/qml/QtQuick/Dialogs/qml
 %{qt5dir}/qml/QtQuick/Dialogs/qmldir
 %dir %{qt5dir}/qml/QtQuick/Extras
 %{qt5dir}/qml/QtQuick/Extras/designer
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Extras/libqtquickextrasplugin.so
+%{qt5dir}/qml/QtQuick/Extras/*.qml
+%{qt5dir}/qml/QtQuick/Extras/*.qmlc
 %{qt5dir}/qml/QtQuick/Extras/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/Extras/qmldir
 %{qt5dir}/qml/QtQuick/Extras/Private
