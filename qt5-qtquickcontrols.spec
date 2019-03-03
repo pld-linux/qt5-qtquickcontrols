@@ -10,14 +10,14 @@
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
-Version:	5.11.1
+Version:	5.12.1
 Release:	1
 License:	LGPL v3 or GPL v2 or commercial
 Group:		X11/Libraries
-Source0:	http://download.qt.io/official_releases/qt/5.11/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
-# Source0-md5:	e9743376000e5db6665114c07148e993
-Source1:	http://download.qt.io/official_releases/qt/5.11/%{version}/submodules/qttranslations-everywhere-src-%{version}.tar.xz
-# Source1-md5:	67c0dbd61c2b92552b5339d82a94b1a8
+Source0:	http://download.qt.io/official_releases/qt/5.12/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
+# Source0-md5:	6ad05ee8458b72feeb03c856af40f198
+Source1:	http://download.qt.io/official_releases/qt/5.12/%{version}/submodules/qttranslations-everywhere-src-%{version}.tar.xz
+# Source1-md5:	045ad1eda4d3a272b24b6c60a06b313f
 URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
@@ -137,7 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C qttranslations-everywhere-src-%{version} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 # keep only qtquickcontrols
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qmlviewer,qt,qtbase,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquick1,qtquickcontrols2,qtserialport,qtscript,qtwebengine,qtwebsockets,qtxmlpatterns}_*.qm
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qt,qtbase,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquickcontrols2,qtserialport,qtscript,qtwebengine,qtwebsockets,qtxmlpatterns}_*.qm
 %endif
 
 # find_lang --with-qm supports only PLD qt3/qt4 specific %{_datadir}/locale/*/LC_MESSAGES layout
@@ -193,13 +193,13 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with doc}
 %files doc
 %defattr(644,root,root,755)
-%{_docdir}/qt5-doc/qtquickcontrols
+%{_docdir}/qt5-doc/qtquickcontrols1
 %{_docdir}/qt5-doc/qtquickdialogs
 %{_docdir}/qt5-doc/qtquickextras
 
 %files doc-qch
 %defattr(644,root,root,755)
-%{_docdir}/qt5-doc/qtquickcontrols.qch
+%{_docdir}/qt5-doc/qtquickcontrols1.qch
 %{_docdir}/qt5-doc/qtquickdialogs.qch
 %{_docdir}/qt5-doc/qtquickextras.qch
 %endif
