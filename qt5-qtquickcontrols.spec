@@ -5,13 +5,13 @@
 
 %define		orgname		qtquickcontrols
 %define		qtbase_ver		%{version}
-%define		qtdeclarative_ver	%{version}
+%define		qtdeclarative_ver	5.12.3-2
 %define		qttools_ver		%{version}
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
 Version:	5.12.3
-Release:	1
+Release:	2
 License:	LGPL v3 or GPL v2 or commercial
 Group:		X11/Libraries
 Source0:	http://download.qt.io/official_releases/qt/5.12/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
