@@ -62,7 +62,7 @@ Requires:	Qt5Gui >= %{qtbase_ver}
 Requires:	Qt5Qml >= %{qtdeclarative_ver}
 Requires:	Qt5Quick >= %{qtdeclarative_ver}
 Requires:	Qt5Widgets >= %{qtbase_ver}
-Obsoletes:	qt5-qtquickcontrols
+Obsoletes:	qt5-qtquickcontrols < 5.3.0
 
 %description -n Qt5Quick-controls
 Qt5 Quick Controls, Dialogs modules.
