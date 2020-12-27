@@ -12,16 +12,15 @@ Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Name:		qt5-%{orgname}
 Version:	5.15.2
 Release:	2
-License:	LGPL v3 or GPL v2 or commercial
+License:	LGPL v3 or GPL v2 or GPL v3 or commercial
 Group:		X11/Libraries
 Source0:	http://download.qt.io/official_releases/qt/5.15/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
 # Source0-md5:	7472c27a7e05fa02ee2fb4f30959d01c
 Source1:	http://download.qt.io/official_releases/qt/5.15/%{version}/submodules/qttranslations-everywhere-src-%{version}.tar.xz
 # Source1-md5:	9b66cdb64402e8fd9e843f8a7120abb1
-URL:		http://www.qt.io/
+URL:		https://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
-BuildRequires:	Qt5Network-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Qml-devel >= %{qtdeclarative_ver}
 BuildRequires:	Qt5Quick-devel >= %{qtdeclarative_ver}
 BuildRequires:	Qt5Widgets-devel >= %{qtbase_ver}
@@ -31,7 +30,7 @@ BuildRequires:	qt5-assistant >= %{qttools_ver}
 BuildRequires:	qt5-build >= %{qtbase_ver}
 %{?with_qm:BuildRequires:	qt5-linguist >= %{qttools_ver}}
 BuildRequires:	qt5-qmake >= %{qtbase_ver}
-BuildRequires:	rpmbuild(macros) >= 1.654
+BuildRequires:	rpmbuild(macros) >= 1.752
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -83,9 +82,7 @@ Summary:	Qt5 Quick Controls documentation in HTML format
 Summary(pl.UTF-8):	Dokumentacja do biblioteki Qt5 Quick Controls w formacie HTML
 Group:		Documentation
 Requires:	qt5-doc-common >= %{qtbase_ver}
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
+%{?noarchpackage}
 
 %description doc
 Qt5 Quick Controls documentation in HTML format.
@@ -98,15 +95,25 @@ Summary:	Qt5 Quick Controls documentation in QCH format
 Summary(pl.UTF-8):	Dokumentacja do biblioteki Qt5 Quick Controls w formacie QCH
 Group:		Documentation
 Requires:	qt5-doc-common >= %{qtbase_ver}
-%if "%{_rpmversion}" >= "5"
-BuildArch:	noarch
-%endif
+%{?noarchpackage}
 
 %description doc-qch
 Qt5 Quick Controls documentation in QCH format.
 
 %description doc-qch -l pl.UTF-8
 Dokumentacja do biblioteki Qt5 Quick Controls w formacie QCH.
+
+%package examples
+Summary:	Qt5 Quick Controls examples
+Summary(pl.UTF-8):	Przykłady do bibliotek Qt5 Quick Controls
+Group:		X11/Development/Libraries
+%{?noarchpackage}
+
+%description examples
+Qt5 Quick Controls examples.
+
+%description examples -l pl.UTF-8
+Przykłady do bibliotek Qt5 Quick Controls.
 
 %prep
 %setup -q -n %{orgname}-everywhere-src-%{version} %{?with_qm:-a1}
@@ -125,6 +132,7 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 
@@ -139,6 +147,31 @@ rm -rf $RPM_BUILD_ROOT
 # keep only qtquickcontrols
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/qt5/translations/{assistant,designer,linguist,qt,qtbase,qtconnectivity,qtdeclarative,qtlocation,qtmultimedia,qtquickcontrols2,qtserialport,qtscript,qtwebengine,qtwebsockets,qtxmlpatterns}_*.qm
 %endif
+
+# Prepare some files list
+ifecho() {
+	r="$RPM_BUILD_ROOT$2"
+	if [ -d "$r" ]; then
+		echo "%%dir $2" >> $1.files
+	elif [ -x "$r" ] ; then
+		echo "%%attr(755,root,root) $2" >> $1.files
+	elif [ -f "$r" ]; then
+		echo "$2" >> $1.files
+	else
+		echo "Error generation $1 files list!"
+		echo "$r: no such file or directory!"
+		return 1
+	fi
+}
+ifecho_tree() {
+	ifecho $1 $2
+	for f in `find $RPM_BUILD_ROOT$2 -printf "%%P "`; do
+		ifecho $1 $2/$f
+	done
+}
+
+echo "%defattr(644,root,root,755)" > examples.files
+ifecho_tree examples %{_examplesdir}/qt5/quickcontrols
 
 # find_lang --with-qm supports only PLD qt3/qt4 specific %{_datadir}/locale/*/LC_MESSAGES layout
 find_qt5_qm()
@@ -163,6 +196,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{qt5dir}/qml/QtQuick/Controls
 %{qt5dir}/qml/QtQuick/Controls/Private
 %{qt5dir}/qml/QtQuick/Controls/Styles
+# R: Core Gui Qml Quick Widgets
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Controls/libqtquickcontrolsplugin.so
 %{qt5dir}/qml/QtQuick/Controls/*.qml
 %{qt5dir}/qml/QtQuick/Controls/*.qmlc
@@ -170,6 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %{qt5dir}/qml/QtQuick/Controls/qmldir
 %dir %{qt5dir}/qml/QtQuick/Dialogs
 %{qt5dir}/qml/QtQuick/Dialogs/Private
+# R: Core Gui Qml Quick
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Dialogs/libdialogplugin.so
 %{qt5dir}/qml/QtQuick/Dialogs/*.qml
 %{qt5dir}/qml/QtQuick/Dialogs/*.qmlc
@@ -179,6 +214,7 @@ rm -rf $RPM_BUILD_ROOT
 %{qt5dir}/qml/QtQuick/Dialogs/qmldir
 %dir %{qt5dir}/qml/QtQuick/Extras
 %{qt5dir}/qml/QtQuick/Extras/designer
+# R: Core Gui Qml Quick
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/Extras/libqtquickextrasplugin.so
 %{qt5dir}/qml/QtQuick/Extras/*.qml
 %{qt5dir}/qml/QtQuick/Extras/*.qmlc
@@ -186,6 +222,7 @@ rm -rf $RPM_BUILD_ROOT
 %{qt5dir}/qml/QtQuick/Extras/qmldir
 %{qt5dir}/qml/QtQuick/Extras/Private
 %dir %{qt5dir}/qml/QtQuick/PrivateWidgets
+# R: Core Gui Qml Quick Widgets
 %attr(755,root,root) %{qt5dir}/qml/QtQuick/PrivateWidgets/libwidgetsplugin.so
 %{qt5dir}/qml/QtQuick/PrivateWidgets/plugins.qmltypes
 %{qt5dir}/qml/QtQuick/PrivateWidgets/qmldir
@@ -203,3 +240,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/qt5-doc/qtquickdialogs.qch
 %{_docdir}/qt5-doc/qtquickextras.qch
 %endif
+
+%files examples -f examples.files
+%defattr(644,root,root,755)
+# XXX: dir shared with qt5-qtbase-examples
+%dir %{_examplesdir}/qt5
