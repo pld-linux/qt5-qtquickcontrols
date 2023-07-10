@@ -58,7 +58,7 @@ Ten pakiet zawiera moduły Qt5 Quick Controls, Dialogs.
 Summary:	The Qt5 Quick Controls modules
 Summary(pl.UTF-8):	Moduły Qt5 Quick Controls
 Group:		X11/Libraries
-Requires:	Qt5Core >= %{qtbase_ver}
+%requires_eq_to	Qt5Core Qt5Core-devel
 Requires:	Qt5Gui >= %{qtbase_ver}
 Requires:	Qt5Qml >= %{qtdeclarative_ver}
 Requires:	Qt5Quick >= %{qtdeclarative_ver}
